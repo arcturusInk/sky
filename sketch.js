@@ -1,59 +1,61 @@
 //turbulence
 //turbulence in the night sky
-//water flow
-let particles = [];
-
-let noiseScale = 0.011;
-
-function positionEllipse() {
-  circleColor = color(random(200,255),random(200,255),random(200,255));
-  fill(circleColor);
-  //fill(255)
- //strokeWeight(4); 
- //stroke('white');
-  ellipse(windowWidth/2,windowHeight/2,windowWidth/4,windowHeight/3);
-
-}
+//water flow/blood
+//fissure
+let dotsArray = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  let num = 900//random(300,3000);
-  //console.log(num);
+
+  let totalDots = random(300,3000);
+  console.log("totalDots: " + totalDots);
   
-  r = random(0,255); // r is a random number between 0 - 255
-  g = random(0,255); // g is a random number betwen 100 - 200
+  r = random(0,255); 
+  g = random(0,255); 
   b = random(0,255);
-  a = random(0,10);
+  al = random(0,10);
+  console.log("alpha: " + al);
+
   strokeW = random(.5,2);
-  console.log(strokeW);
+  console.log("strokeWeight: " + strokeW);
+
+  noiseMultiplier = random([0.0009,0.003,0.004,0.005,0.008,0.009, 0.011]);
+  console.log("noise multiplier: " + noiseMultiplier);
   
-  for (let i = 0; i < num; ++i){
-    particles.push(createVector(random(width), random(height)));
+  for (let i = 0; i < totalDots; ++i){
+    dotsArray.push(createVector(random(width), random(height)));
+  }
+
+}
+
+function seenOnCanvas(speck){
+  return speck.x >= 0 && speck.x <= width && speck.y >= 0 && speck.y <= height; 
+}
+
+function turbulence(){
+  for(speck of dotsArray){ 
+    strokeWeight(strokeW);
+    stroke(r,g,b);
+    point(speck.x, speck.y);
+    let n = noise(speck.x * noiseMultiplier, speck.y * noiseMultiplier);
+    //get an angle
+    //console.log(n);
+    let a = TAU * n;
+    //convert angle to x & y
+    speck.x += cos(a);
+    speck.y += sin(a);
+    if(!seenOnCanvas(speck)){
+      speck.x = random(width);
+      speck.y = random(height);
+    }
   }
 }
 
 function draw() {  
   
-  background(0,a);
+  background(0,al);
   
-  for(speck of particles){ 
-    strokeWeight(strokeW);
-    stroke(r,g,b);
-    point(speck.x, speck.y);
-    let n = noise(speck.x * noiseScale, speck.y * noiseScale);
-    let a = TAU * n;
-    speck.x += cos(a);
-    speck.y += sin(a);
-    if(!onScreen(speck)){
-      speck.x = random(width);
-      speck.y = random(height);
-    }
-  }
-  
-  //positionEllipse();
+  turbulence();
   
 }
 
-function onScreen(v){
-  return v.x >= 0 && v.x <= width && v.y >= 0 && v.y <= height; 
-}

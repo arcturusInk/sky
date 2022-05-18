@@ -3,9 +3,15 @@
 //water flow/blood
 //fissure
 let dotsArray = [];
+let r, g, b, al;
+let r1, r2, g1, g2, b1, b2;
+let decider;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+
+  decider = random(1);
+  console.log("decider: " + decider);
 
   let totalDots = random(300,3000);
   console.log("totalDots: " + totalDots);
@@ -15,6 +21,13 @@ function setup() {
   b = random(0,255);
   al = random(0,10);
   console.log("alpha: " + al);
+
+  r1 = random(255);
+  r2 = random(255);
+  g1 = random(255);
+  g2 = random(255);
+  b1 = random(255);
+  b2 = random(255);
 
   strokeW = random(.5,2);
   console.log("strokeWeight: " + strokeW);
@@ -34,8 +47,19 @@ function seenOnCanvas(speck){
 
 function turbulence(){
   for(speck of dotsArray){ 
+
     strokeWeight(strokeW);
-    stroke(r,g,b);
+
+    if(decider < 0.6){
+      let rc = map(speck.x, 0, width, r1, r2);
+      let gc = map(speck.y, 0, height, g1, g2);
+      let bc = map(speck.x, 0, width, b1, b2); 
+
+      stroke(rc, gc, bc);
+    } else{
+      stroke(r,g,b);
+    }
+  
     point(speck.x, speck.y);
     let n = noise(speck.x * noiseMultiplier, speck.y * noiseMultiplier);
     //get an angle

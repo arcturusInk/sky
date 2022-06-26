@@ -15,11 +15,11 @@ function setup() {
   console.log("decider: " + decider);
 
   //how many points on the screen
-  totalDots = random(300,3000);
+  totalDots = random(2500,3000);
   console.log("totalDots: " + totalDots);
 
   //determines the direction of the flow: left = 1 or right = -1
-  direction = random([1,-1]);
+  direction = random([1, 2, -1, -2]);
   console.log("direction: " + direction);
   
   //determines the one color
@@ -41,7 +41,7 @@ function setup() {
   console.log("strokeWeight: " + strokeW);
 
   //noise value is between 0 to 1; values to multiply by
-  noiseMultiplier = random([0.0009,0.003,0.004,0.005,0.008,0.009, 0.011]);
+  noiseMultiplier = random([0.0009,0.003,0.011]);
   console.log("noise multiplier: " + noiseMultiplier);
   
   //create the position of the pixel and add them to the array
@@ -78,8 +78,8 @@ function turbulence(){
     let angle = TAU * n;
 
     //convert angle to x & y || direction determines left or right
-    speck.x += cos(angle) * direction;
-    speck.y += sin(angle);
+    speck.x += cos(angle) * 0;
+    speck.y += sin(angle) * direction;
 
 
     if(!seenOnCanvas(speck)){
